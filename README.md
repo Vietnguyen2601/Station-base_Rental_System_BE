@@ -29,14 +29,6 @@ EV Rental Platform là một nền tảng cho thuê xe điện (EV) được thi
 | Nguyễn Minh Thiện   | Backend Developer   | Xây dựng API và logic nghiệp vụ      |
 | Nguyễn Tấn Phát     | Frontend Developer  | Leader, quản lý dự án frontend       |
 
-
-- **[APIService Layer]**: Chứa Controllers và Dependency Injection setup.
-- **[Services Layer]**: Logic nghiệp vụ và orchestration với Repositories.
-- **[Repositories Layer]**: EF Core DbContext, Repository classes, và Queries.
-- **[Database / External APIs]**: Kết nối với PostgreSQL, Redis, MongoDB, APIs (e.g., Google Maps).
-- **[Common Layer]**: DTOs, Models, Utilities dùng chung.
-- **[Tests]**: Unit Tests với xUnit/NUnit.
-
 ## Cài đặt
 1. **Yêu cầu**:
    - .NET 8 SDK
