@@ -10,4 +10,8 @@
     <ProjectReference Include="..\EVStationRental.Common\EVStationRental.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UnitOfWork\" />
+  </ItemGroup>
+
 </Project>

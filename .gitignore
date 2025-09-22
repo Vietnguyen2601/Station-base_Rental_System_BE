@@ -271,4 +271,11 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/
 
+# ASPNETCore (existing content remains above)
+
+# Add appsettings files to ignore
+appsettings.json
+appsettings*.json  # Bắt tất cả các biến thể như appsettings.Development.json
+
+
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
