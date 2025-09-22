@@ -21,24 +21,13 @@ EV Rental Platform là một nền tảng cho thuê xe điện (EV) được thi
   - **Cloud**: Azure (App Service + AKS) với Docker.
 - **Xu hướng**: Cloud-based, AI-driven insights, mobile-first, sustainable EV features.
 
-## Cấu trúc tệp
-EVRentalPlatform/
-├── EVRentalPlatform.APIService/       # Presentation Layer: ASP.NET Web API
-│   ├── Controllers/                    # API endpoints
-│   └── DependencyInjectionSetup/       # DI configuration
-├── EVRentalPlatform.Services/         # Business Logic Layer
-│   ├── UseCases/                       # Business logic
-│   └── Services/                       # Orchestration
-├── EVRentalPlatform.Repositories/     # Data Access Layer
-│   ├── Repositories/                   # Repository classes
-│   ├── EFDbContext/                    # EF Core DbContext
-│   └── Queries/                        # Custom queries
-├── EVRentalPlatform.Common/           # Shared/Utility
-│   ├── DTOs/                           # Data Transfer Objects
-│   ├── Models/                         # Shared models
-│   └── Utilities/                      # Helpers, Constants               # Test cases
-├── .sonarqube/                         # Code quality analysis (SonarQube)
-└── EVRentalPlatform.APIService.sln    # Solution file
+## Thành viên
+| Name                | Role                | Task                                 |
+|---------------------|---------------------|--------------------------------------|
+| Nguyễn Minh Nhật    | Backend Developer   | Quản lý dự án, phát triển backend    |
+| Nguyễn Quốc Việt    | FullStack Developer | Leader, Thiết kế và phát triển UI    |
+| Nguyễn Minh Thiện   | Backend Developer   | Xây dựng API và logic nghiệp vụ      |
+| Nguyễn Tấn Phát     | Frontend Developer  | Leader, quản lý dự án frontend       |
 
 
 - **[APIService Layer]**: Chứa Controllers và Dependency Injection setup.
