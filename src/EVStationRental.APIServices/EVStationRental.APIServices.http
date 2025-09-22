@@ -1,0 +1,6 @@
+@EVStationRental.APIServices_HostAddress = http://localhost:5228
+
+GET {{EVStationRental.APIServices_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
