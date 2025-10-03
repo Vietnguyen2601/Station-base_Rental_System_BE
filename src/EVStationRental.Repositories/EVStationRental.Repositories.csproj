@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="IRepositories\" />
+    <Folder Include="Mapper\" />
+    <Folder Include="Repositories\" />
     <Folder Include="UnitOfWork\" />
   </ItemGroup>
 
