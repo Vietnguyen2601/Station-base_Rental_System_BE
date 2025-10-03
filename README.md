@@ -12,14 +12,13 @@ EV Rental Platform là một nền tảng cho thuê xe điện (EV) được thi
 - **Admin**: Quản lý đội xe/điểm thuê, khách hàng, nhân viên, báo cáo/AI phân tích.
 
 ## Kiến trúc và Công nghệ
-- **Kiến trúc**: Modular Monolith (dễ mở rộng sang Microservices).
+- **Kiến trúc**: Modular Monolith.
 - **Tech Stack**:
   - **Backend**: ASP.NET 8 (Minimal APIs + MediatR) với CQRS.
   - **Frontend**: ReactJS (hooks) cho UI động.
-  - **Database**: PostgreSQL (PostGIS), Redis, MongoDB.
-  - **Messaging**: RabbitMQ.
-  - **Cloud**: Azure (App Service + AKS) với Docker.
-- **Xu hướng**: Cloud-based, AI-driven insights, mobile-first, sustainable EV features.
+  - **Database**: PostgreSQL (PostGIS).
+  - **Cloud**: Azure (App Service + AKS).
+- **Xu hướng**: Cloud-based, mobile-first, sustainable EV features.
 
 ## Thành viên
 | Name                | Role                | Task                                 |
