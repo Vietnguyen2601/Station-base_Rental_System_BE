@@ -15,6 +15,5 @@ namespace EVStationRental.Common.Enums
         NotFound = 404,      // Không tìm thấy
         Conflict = 409,      // Xung đột
         InternalError = 500  // Lỗi server
-        // Thêm các mã trạng thái khác nếu cần
-    }
+        }
 }
