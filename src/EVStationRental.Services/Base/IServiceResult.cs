@@ -1,4 +1,4 @@
-﻿using EVStationRental.Common.Enums;
+﻿using EVStationRental.Common.Enums.ServiceResultEnum;
 using EVStationRental.Common.Helpers;
 using System;
 using System.Collections.Generic;
@@ -10,10 +10,8 @@ namespace EVStationRental.Services.Base
 {
     public interface IServiceResult
     {
-        ResultStatus StatusCode { get; set; }
+        int StatusCode { get; set; }
         string? Message { get; set; }
         object? Data { get; set; }
-        bool IsSuccess { get; }
-        List<ErrorDetail>? Errors { get; set; }
     }
 }

@@ -1,6 +1,17 @@
+using EVStationRental.Repositories.UnitOfWork;
+using EVStationRental.Services.InternalServices.IServices.IAccountServices;
+using EVStationRental.Services.InternalServices.Services.AccountServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ??ng ký Services 
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+
+// ??ng ký UnitOfWork và các Repository liên quan
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<UnitOfWork>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

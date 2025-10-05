@@ -1,16 +1,11 @@
+using EVStationRental.Repositories.IRepositories;
 using System;
 using System.Threading.Tasks;
 
 namespace EVStationRental.Repositories.UnitOfWork
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
-        // Add your repository properties here, for example:
-        // IStationRepository Stations { get; }
-        // IBookingRepository Bookings { get; }
-        // IUserRepository Users { get; }
-
-        int Save();
-        Task<int> SaveAsync();
+        IAccountRepository AccountRepository { get; }
     }
 }
