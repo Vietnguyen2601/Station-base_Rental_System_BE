@@ -85,5 +85,61 @@ namespace EVStationRental.APIServices.Controllers
                 Data = result.Data
             });
         }
+
+        /// <summary>
+        /// Lấy danh sách tất cả tài khoản Customer
+        /// </summary>
+        /// <returns>Danh sách tài khoản trong hệ thống</returns>
+        /// <response code="200">Trả về danh sách tài khoản Customer thành công</response>
+        /// <response code="404">Không tìm thấy dữ liệu</response>
+        /// <response code="500">Lỗi server khi xử lý yêu cầu</response>
+        [HttpGet("Customer")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IServiceResult>> GetAllCustomerAsync()
+        {
+            var result = await _accountService.GetAllCustomerAccountsAsync();
+            if (result.Data == null)
+            {
+                return NotFound(new
+                {
+                    Message = Const.WARNING_NO_DATA_MSG
+                });
+            }
+            return Ok(new
+            {
+                Message = Const.SUCCESS_READ_MSG,
+                Data = result.Data
+            });
+        }
+            
+        /// <summary>
+        /// Lấy danh sách tất cả tài khoản Staff
+        /// </summary>
+        /// <returns>Danh sách tài khoản trong hệ thống</returns>
+        /// <response code="200">Trả về danh sách tài khoản Staff thành công</response>
+        /// <response code="404">Không tìm thấy dữ liệu</response>
+        /// <response code="500">Lỗi server khi xử lý yêu cầu</response>
+        [HttpGet("Staff")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IServiceResult>> GetAllStaffAsync()
+        {
+            var result = await _accountService.GetAllStaffAccountsAsync();
+            if (result.Data == null)
+            {
+                return NotFound(new
+                {
+                    Message = Const.WARNING_NO_DATA_MSG
+                });
+            }
+            return Ok(new
+            {
+                Message = Const.SUCCESS_READ_MSG,
+                Data = result.Data
+            });
+        }
     }
 }

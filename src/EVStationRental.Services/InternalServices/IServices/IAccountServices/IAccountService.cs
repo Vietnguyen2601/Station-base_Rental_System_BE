@@ -12,5 +12,7 @@ namespace EVStationRental.Services.InternalServices.IServices.IAccountServices
     {
         Task<IServiceResult> GetAccountByIdAsync(Guid id);
         Task<IServiceResult> GetAllAccountsAsync();
+        Task<IServiceResult> GetAllCustomerAccountsAsync();
+        Task<IServiceResult> GetAllStaffAccountsAsync();
     }
 }

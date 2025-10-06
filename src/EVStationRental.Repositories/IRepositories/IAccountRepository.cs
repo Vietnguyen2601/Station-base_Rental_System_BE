@@ -18,6 +18,8 @@ namespace EVStationRental.Repositories.IRepositories
         Task<Account>? GetAccountWithDetailsAsync(Guid accountId);
         Task<Account>? GetAccountByIdAsync(Guid accountId);
         Task<Account>? GetByUsernameOrEmailAsync(string usernameOrEmail);
+        Task<List<Account>>? GetAllCustomersByRole();
+        Task<List<Account>>? GetAllStaffByRole();
 
     }
 }

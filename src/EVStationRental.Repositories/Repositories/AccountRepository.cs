@@ -62,6 +62,25 @@ namespace EVStationRental.Repositories.Repositories
                 .FirstOrDefaultAsync(a => a.AccountId == accountId);
         }
 
+        public async Task<List<Account>> GetAllCustomersByRole()
+        {
+            return await _context.Accounts
+                .Include(a => a.AccountRoles)
+                .ThenInclude(ar => ar.Role)
+                .Where(a => a.AccountRoles.Any(ar => ar.Role.RoleName == "Customer"))
+                .ToListAsync();
+        }
+
+        public async Task<List<Account>> GetAllStaffByRole()
+        {
+            return await _context.Accounts
+                .Include(a => a.AccountRoles)
+                .ThenInclude(ar => ar.Role)
+                .Where(a => a.AccountRoles.Any(ar => ar.Role.RoleName == "Staff"))
+                .ToListAsync();
+        }
+
+
         public async Task<Account?> GetAccountByIdAsync(Guid accountId)
         {
             return await _context.Accounts
@@ -82,5 +101,8 @@ namespace EVStationRental.Repositories.Repositories
                 .ThenInclude(ar => ar.Role)
                 .ToListAsync();
         }
+
+        //public async Task<Account> StaffRegisterAsync
+
     }
 }

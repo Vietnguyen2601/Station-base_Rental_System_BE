@@ -93,5 +93,71 @@ namespace EVStationRental.Services.InternalServices.Services.AccountServices
                 };
             }
         }
+
+        public async Task<IServiceResult> GetAllCustomerAccountsAsync()
+        {
+            try
+            {
+                var accounts = await unitOfWork.AccountRepository.GetAllCustomersByRole();
+                if (accounts == null || accounts.Count == 0)
+                {
+                    return new ServiceResult
+                    {
+                        StatusCode = Const.WARNING_NO_DATA_CODE,
+                        Message = Const.WARNING_NO_DATA_MSG
+                    };
+                }
+                var accountDtos = new List<ViewAccountDTO>();
+                accountDtos.AddRange(accounts.Select(account => account.ToViewAccountDTO()));
+                return new ServiceResult
+                {
+                    StatusCode = Const.SUCCESS_READ_CODE,
+                    Message = Const.SUCCESS_READ_MSG,
+                    Data = accountDtos
+                };
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
+                return new ServiceResult
+                {
+                    StatusCode = Const.ERROR_EXCEPTION,
+                    Message = $"Lỗi khi lấy danh sách tài khoản khách hàng: {ex.Message} {innerMessage}"
+                };
+            }
+        }
+
+        public async Task<IServiceResult> GetAllStaffAccountsAsync()
+        {
+            try
+            {
+                var accounts = await unitOfWork.AccountRepository.GetAllStaffByRole();
+                if (accounts == null || accounts.Count == 0)
+                {
+                    return new ServiceResult
+                    {
+                        StatusCode = Const.WARNING_NO_DATA_CODE,
+                        Message = Const.WARNING_NO_DATA_MSG
+                    };
+                }
+                var accountDtos = new List<ViewAccountDTO>();
+                accountDtos.AddRange(accounts.Select(account => account.ToViewAccountDTO()));
+                return new ServiceResult
+                {
+                    StatusCode = Const.SUCCESS_READ_CODE,
+                    Message = Const.SUCCESS_READ_MSG,
+                    Data = accountDtos
+                };
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
+                return new ServiceResult
+                {
+                    StatusCode = Const.ERROR_EXCEPTION,
+                    Message = $"Lỗi khi lấy danh sách tài khoản nhân viên: {ex.Message} {innerMessage}"
+                };
+            }
+        }
     }
 }
