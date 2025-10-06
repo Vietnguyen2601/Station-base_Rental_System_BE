@@ -1,4 +1,5 @@
-﻿using EVStationRental.Repositories.Models;
+﻿using EVStationRental.Repositories.Base;
+using EVStationRental.Repositories.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EVStationRental.Repositories.IRepositories
 {
-    public interface IAccountRepository
+    public interface IAccountRepository : IGenericRepository<Account>
     {
         Task<Account>? GetByUsernameAsync(string username);
         Task<Account>? GetByEmailAsync(string email);

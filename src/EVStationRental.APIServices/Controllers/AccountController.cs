@@ -2,11 +2,13 @@
 using EVStationRental.Services.Base;
 using EVStationRental.Services.InternalServices.IServices.IAccountServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EVStationRental.APIServices.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Staff,Admin")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;

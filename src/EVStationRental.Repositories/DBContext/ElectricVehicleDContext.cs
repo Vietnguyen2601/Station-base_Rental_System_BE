@@ -47,6 +47,8 @@ public partial class ElectricVehicleDContext : DbContext
 
     public virtual DbSet<VehicleType> VehicleTypes { get; set; }
 
+    
+
     public static string GetConnectionString(string connectionStringName)
     {
         // Kiểm tra biến môi trường trước
@@ -114,6 +116,8 @@ public partial class ElectricVehicleDContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("username");
         });
+
+        
 
         modelBuilder.Entity<AccountRole>(entity =>
         {
