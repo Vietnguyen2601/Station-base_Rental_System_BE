@@ -6,8 +6,10 @@ using EVStationRental.Repositories.UnitOfWork;
 using EVStationRental.Repositories.UnitOfWork;
 using EVStationRental.Services.InternalServices.IServices.IAccountServices;
 using EVStationRental.Services.InternalServices.IServices.IAuthServices;
+using EVStationRental.Services.InternalServices.IServices.IVehicleServices;
 using EVStationRental.Services.InternalServices.Services.AccountServices;
 using EVStationRental.Services.InternalServices.Services.AuthServices;
+using EVStationRental.Services.InternalServices.Services.VehicleServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -18,6 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
 // ??ng k� Services 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+//vehicle
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 
 // ??ng k� UnitOfWork v� c�c Repository li�n quan
