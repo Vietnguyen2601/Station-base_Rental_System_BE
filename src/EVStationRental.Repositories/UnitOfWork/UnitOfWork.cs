@@ -11,6 +11,9 @@ namespace EVStationRental.Repositories.UnitOfWork
         private readonly ElectricVehicleDContext _context;
 
         private IAccountRepository accountRepository;
+        private IVehicleRepository vehicleRepository;
+        private IVehicleModelRepository vehicleModelRepository;
+        private IStationRepository stationRepository;
 
         public UnitOfWork()
         {
@@ -25,5 +28,28 @@ namespace EVStationRental.Repositories.UnitOfWork
             }
         }
 
+        public IVehicleRepository VehicleRepository
+        {
+            get
+            {
+                return vehicleRepository ??= new Repositories.VehicleRepository(_context);
+            }
+        }
+
+        public IVehicleModelRepository VehicleModelRepository
+        {
+            get
+            {
+                return vehicleModelRepository ??= new Repositories.VehicleModelRepository(_context);
+            }
+        }
+
+        public IStationRepository StationRepository
+        {
+            get
+            {
+                return stationRepository ??= new Repositories.StationRepository(_context);
+            }
+        }
     }
 }
