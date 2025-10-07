@@ -20,5 +20,12 @@ namespace EVStationRental.Repositories.Repositories
         {
             return await _context.Set<Station>().FindAsync(id);
         }
+
+        public async Task<Station> CreateStationAsync(Station station)
+        {
+            _context.Set<Station>().Add(station);
+            await _context.SaveChangesAsync();
+            return station;
+        }
     }
 }

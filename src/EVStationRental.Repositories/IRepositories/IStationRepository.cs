@@ -7,5 +7,6 @@ namespace EVStationRental.Repositories.IRepositories
     public interface IStationRepository
     {
         Task<Station?> GetStationByIdAsync(Guid id);
+        Task<Station> CreateStationAsync(Station station);
     }
 }
