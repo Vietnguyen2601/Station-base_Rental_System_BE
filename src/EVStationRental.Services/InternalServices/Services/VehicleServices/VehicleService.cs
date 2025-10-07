@@ -102,19 +102,7 @@ namespace EVStationRental.Services.InternalServices.Services.VehicleServices
                     Message = "SerialNumber đã tồn tại"
                 };
             }
-
-            var vehicle = new Vehicle
-            {
-                VehicleId = Guid.NewGuid(),
-                SerialNumber = dto.SerialNumber,
-                ModelId = dto.ModelId,
-                StationId = dto.StationId,
-                BatteryLevel = dto.BatteryLevel,
-                LocationLat = dto.LocationLat,
-                LocationLong = dto.LocationLong,
-                LastMaintenance = dto.LastMaintenance,
-                CreatedAt = DateTime.Now
-            };
+            var vehicle = dto.ToVehicle();
             var result = await unitOfWork.VehicleRepository.CreateVehicleAsync(vehicle);
             return new ServiceResult
             {
