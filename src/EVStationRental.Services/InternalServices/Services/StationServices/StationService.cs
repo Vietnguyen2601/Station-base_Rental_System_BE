@@ -74,11 +74,12 @@ namespace EVStationRental.Services.InternalServices.Services.StationServices
                     Message = "Không có xe nào trong tr?m này"
                 };
             }
+            var vehicleDTOs = vehicles.Select(v => v.ToViewVehicleDTO()).ToList();
             return new ServiceResult
             {
                 StatusCode = Const.SUCCESS_READ_CODE,
                 Message = Const.SUCCESS_READ_MSG,
-                Data = vehicles.Select(v => v.ToViewVehicleDTO()).ToList()
+                Data = vehicleDTOs
             };
         }
 

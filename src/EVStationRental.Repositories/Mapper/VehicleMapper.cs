@@ -1,5 +1,6 @@
 using EVStationRental.Common.DTOs.VehicleDTOs;
 using EVStationRental.Repositories.Models;
+using System;
 
 namespace EVStationRental.Repositories.Mapper
 {
@@ -19,6 +20,22 @@ namespace EVStationRental.Repositories.Mapper
                 LastMaintenance = vehicle.LastMaintenance,
                 CreatedAt = vehicle.CreatedAt,
                 UpdatedAt = vehicle.UpdatedAt
+            };
+        }
+
+        public static Vehicle ToVehicle(this CreateVehicleRequestDTO dto)
+        {
+            return new Vehicle
+            {
+                VehicleId = Guid.NewGuid(),
+                SerialNumber = dto.SerialNumber,
+                ModelId = dto.ModelId,
+                StationId = dto.StationId,
+                BatteryLevel = dto.BatteryLevel,
+                LocationLat = dto.LocationLat,
+                LocationLong = dto.LocationLong,
+                LastMaintenance = dto.LastMaintenance,
+                CreatedAt = DateTime.Now
             };
         }
     }
