@@ -111,5 +111,44 @@ namespace EVStationRental.Services.InternalServices.Services.VehicleServices
                 Data = result.ToViewVehicleDTO()
             };
         }
+
+        public async Task<IServiceResult> UpdateVehicleAsync(Guid vehicleId, UpdateVehicleRequestDTO dto)
+        {
+            var vehicle = await unitOfWork.VehicleRepository.GetVehicleByIdAsync(vehicleId);
+            if (vehicle == null)
+                return new ServiceResult { StatusCode = Const.WARNING_NO_DATA_CODE, Message = "Không tìm thấy xe" };
+
+            // Kiểm tra battery
+            if (dto.BatteryLevel != null && dto.BatteryLevel <= 0)
+                return new ServiceResult { StatusCode = Const.ERROR_VALIDATION_CODE, Message = "Mức pin phải là số dương" };
+
+            // Kiểm tra StationId nếu có thay đổi
+            if (dto.StationId != null)
+            {
+                var station = await unitOfWork.StationRepository.GetStationByIdAsync(dto.StationId.Value);
+                if (station == null)
+                    return new ServiceResult { StatusCode = Const.ERROR_VALIDATION_CODE, Message = "StationId không hợp lệ" };
+            }
+
+            // Kiểm tra ModelId nếu có thay đổi
+            if (dto.ModelId != null)
+            {
+                var model = await unitOfWork.VehicleModelRepository.GetVehicleModelByIdAsync(dto.ModelId.Value);
+                if (model == null)
+                    return new ServiceResult { StatusCode = Const.ERROR_VALIDATION_CODE, Message = "ModelId không hợp lệ" };
+                vehicle.ModelId = dto.ModelId.Value;
+            }
+
+            // Map DTO to entity chỉ với các trường có trong model Vehicle, không cập nhật VehicleId
+            dto.MapToVehicle(vehicle);
+
+            var updated = await unitOfWork.VehicleRepository.UpdateVehicleAsync(vehicle);
+            return new ServiceResult
+            {
+                StatusCode = Const.SUCCESS_UPDATE_CODE,
+                Message = Const.SUCCESS_UPDATE_MSG,
+                Data = updated.ToViewVehicleDTO()
+            };
+        }
     }
 }

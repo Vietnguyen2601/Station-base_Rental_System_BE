@@ -11,5 +11,6 @@ namespace EVStationRental.Repositories.IRepositories
         Task<List<Vehicle>> GetAllVehiclesAsync();
         Task<Vehicle?> GetVehicleByIdAsync(Guid vehicleId);
         Task<Vehicle> CreateVehicleAsync(Vehicle vehicle);
+        Task<Vehicle?> UpdateVehicleAsync(Vehicle vehicle);
     }
 }

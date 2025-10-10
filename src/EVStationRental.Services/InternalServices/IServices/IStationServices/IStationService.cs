@@ -11,5 +11,6 @@ namespace EVStationRental.Services.InternalServices.IServices.IStationServices
         Task<IServiceResult> GetAllStationsAsync();
         Task<IServiceResult> GetVehiclesByStationIdAsync(Guid stationId);
         Task<IServiceResult> AddVehiclesToStationAsync(AddVehiclesToStationRequestDTO dto);
+        Task<IServiceResult> UpdateStationAsync(Guid stationId, UpdateStationRequestDTO dto);
     }
 }

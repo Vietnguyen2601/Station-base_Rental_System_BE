@@ -38,5 +38,17 @@ namespace EVStationRental.Repositories.Mapper
                 CreatedAt = DateTime.Now
             };
         }
+
+        public static void MapToVehicle(this UpdateVehicleRequestDTO dto, Vehicle vehicle)
+        {
+            // Không cho ch?nh s?a VehicleId
+            if (dto.StationId != null) vehicle.StationId = dto.StationId;
+            if (dto.ModelId != null) vehicle.ModelId = dto.ModelId.Value;
+            if (dto.BatteryLevel != null) vehicle.BatteryLevel = dto.BatteryLevel;
+            if (dto.LastMaintenance != null) vehicle.LastMaintenance = dto.LastMaintenance;
+            if (dto.LocationLat != null) vehicle.LocationLat = dto.LocationLat;
+            if (dto.LocationLong != null) vehicle.LocationLong = dto.LocationLong;
+            vehicle.UpdatedAt = DateTime.Now;
+        }
     }
 }

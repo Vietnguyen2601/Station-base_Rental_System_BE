@@ -54,5 +54,12 @@ namespace EVStationRental.Repositories.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<Station?> UpdateStationAsync(Station station)
+        {
+            _context.Stations.Update(station);
+            await _context.SaveChangesAsync();
+            return station;
+        }
     }
 }
