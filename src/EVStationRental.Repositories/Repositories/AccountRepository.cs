@@ -82,5 +82,77 @@ namespace EVStationRental.Repositories.Repositories
                 .ThenInclude(ar => ar.Role)
                 .ToListAsync();
         }
+
+        public async Task<bool> SetAccountRolesAsync(Guid accountId, List<Guid> roleIds)
+        {
+            try
+            {
+                // Get existing account roles
+                var existingRoles = await _context.AccountRoles
+                    .Where(ar => ar.AccountId == accountId)
+                    .ToListAsync();
+
+                // Remove existing roles
+                _context.AccountRoles.RemoveRange(existingRoles);
+
+                // Add new roles
+                var newAccountRoles = roleIds.Select(roleId => new AccountRole
+                {
+                    AccountRoleId = Guid.NewGuid(),
+                    AccountId = accountId,
+                    RoleId = roleId,
+                    IsActive = true
+                }).ToList();
+
+                await _context.AccountRoles.AddRangeAsync(newAccountRoles);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<Account?> GetAccountWithRolesAsync(Guid accountId)
+        {
+            return await _context.Accounts
+                .Include(a => a.AccountRoles)
+                .ThenInclude(ar => ar.Role)
+                .FirstOrDefaultAsync(a => a.AccountId == accountId);
+        }
+
+        public async Task<bool> AddAccountRoleAsync(Guid accountId, Guid roleId)
+        {
+            // Check if the role already exists for this account
+            var existingRole = await _context.AccountRoles
+                .FirstOrDefaultAsync(ar => ar.AccountId == accountId && ar.RoleId == roleId);
+
+            if (existingRole != null)
+            {
+                // Role already exists, just ensure it's active
+                if (!existingRole.IsActive)
+                {
+                    existingRole.IsActive = true;
+                    await _context.SaveChangesAsync();
+                }
+                return true;
+            }
+
+            // Add new role
+            var newAccountRole = new AccountRole
+            {
+                AccountRoleId = Guid.NewGuid(),
+                AccountId = accountId,
+                RoleId = roleId,
+                IsActive = true
+            };
+
+            await _context.AccountRoles.AddAsync(newAccountRole);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

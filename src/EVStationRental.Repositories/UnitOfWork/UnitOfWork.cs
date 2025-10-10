@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using EVStationRental.Repositories.DBContext;
 using EVStationRental.Repositories.IRepositories;
@@ -14,6 +14,7 @@ namespace EVStationRental.Repositories.UnitOfWork
         private IVehicleRepository vehicleRepository;
         private IVehicleModelRepository vehicleModelRepository;
         private IStationRepository stationRepository;
+        private IRoleRepository roleRepository;
 
         public UnitOfWork()
         {
@@ -49,6 +50,14 @@ namespace EVStationRental.Repositories.UnitOfWork
             get
             {
                 return stationRepository ??= new Repositories.StationRepository(_context);
+            }
+        }
+
+        public IRoleRepository RoleRepository
+        {
+            get
+            {
+                return roleRepository ??= new Repositories.RoleRepository(_context);
             }
         }
     }

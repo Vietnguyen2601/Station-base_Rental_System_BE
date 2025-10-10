@@ -1,4 +1,5 @@
-﻿using EVStationRental.Common.Enums.ServiceResultEnum;
+﻿using EVStationRental.Common.DTOs;
+using EVStationRental.Common.Enums.ServiceResultEnum;
 using EVStationRental.Services.Base;
 using EVStationRental.Services.InternalServices.IServices.IAccountServices;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace EVStationRental.APIServices.Controllers
         {
             if (id == Guid.Empty)
             {
-                return BadRequest(new ServiceResult
+                return BadRequest(new
                 {
                     StatusCode = Const.ERROR_VALIDATION_CODE,
                     Message = "ID tài khoản không hợp lệ"
@@ -82,6 +83,125 @@ namespace EVStationRental.APIServices.Controllers
             return Ok(new
             {
                 Message = Const.SUCCESS_READ_MSG,
+                Data = result.Data
+            });
+        }
+
+        /// <summary>
+        /// Thiết lập vai trò cho tài khoản
+        /// </summary>
+        /// <param name="setAccountRoleDto">Thông tin tài khoản và danh sách vai trò</param>
+        /// <returns>Kết quả cập nhật vai trò</returns>
+        /// <response code="200">Cập nhật vai trò thành công</response>
+        /// <response code="400">Dữ liệu không hợp lệ</response>
+        /// <response code="404">Không tìm thấy tài khoản</response>
+        /// <response code="500">Lỗi server khi xử lý yêu cầu</response>
+        [HttpPut("set-roles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IServiceResult>> SetAccountRoles([FromBody] SetAccountRoleDTO setAccountRoleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = Const.ERROR_VALIDATION_CODE,
+                    Message = "Dữ liệu không hợp lệ"
+                });
+            }
+
+            var result = await _accountService.SetAccountRolesAsync(
+                setAccountRoleDto.AccountId, 
+                setAccountRoleDto.RoleIds
+            );
+
+            if (result.StatusCode == Const.WARNING_NO_DATA_CODE)
+            {
+                return NotFound(new
+                {
+                    Message = result.Message
+                });
+            }
+
+            if (result.StatusCode == Const.ERROR_VALIDATION_CODE)
+            {
+                return BadRequest(new
+                {
+                    Message = result.Message
+                });
+            }
+
+            if (result.StatusCode == Const.ERROR_EXCEPTION)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    Message = result.Message
+                });
+            }
+
+            return Ok(new
+            {
+                Message = result.Message,
+                Data = result.Data
+            });
+        }
+
+        /// <summary>
+        /// Thiết lập vai trò Admin cho tài khoản
+        /// </summary>
+        /// <param name="setAdminRoleDto">Thông tin tài khoản cần thêm vai trò Admin</param>
+        /// <returns>Kết quả thêm vai trò Admin</returns>
+        /// <response code="200">Thêm vai trò Admin thành công</response>
+        /// <response code="400">Dữ liệu không hợp lệ</response>
+        /// <response code="404">Không tìm thấy tài khoản hoặc vai trò Admin</response>
+        /// <response code="500">Lỗi server khi xử lý yêu cầu</response>
+        [HttpPost("set-admin-role")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IServiceResult>> SetAdminRole([FromBody] SetAdminRoleDTO setAdminRoleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = Const.ERROR_VALIDATION_CODE,
+                    Message = "Dữ liệu không hợp lệ"
+                });
+            }
+
+            var result = await _accountService.SetAdminRoleAsync(setAdminRoleDto.AccountId);
+
+            if (result.StatusCode == Const.WARNING_NO_DATA_CODE)
+            {
+                return NotFound(new
+                {
+                    Message = result.Message
+                });
+            }
+
+            if (result.StatusCode == Const.ERROR_VALIDATION_CODE)
+            {
+                return BadRequest(new
+                {
+                    Message = result.Message
+                });
+            }
+
+            if (result.StatusCode == Const.ERROR_EXCEPTION)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    Message = result.Message
+                });
+            }
+
+            return Ok(new
+            {
+                Message = result.Message,
                 Data = result.Data
             });
         }
