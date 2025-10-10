@@ -4,6 +4,7 @@ using EVStationRental.Services.InternalServices.IServices.IVehicleServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using EVStationRental.Common.DTOs.VehicleDTOs;
+using System;
 
 namespace EVStationRental.APIServices.Controllers
 {
@@ -60,6 +61,13 @@ namespace EVStationRental.APIServices.Controllers
         public async Task<ActionResult<IServiceResult>> CreateVehicleAsync([FromBody] CreateVehicleRequestDTO dto)
         {
             var result = await _vehicleService.CreateVehicleAsync(dto);
+            return StatusCode((int)result.StatusCode, new { Message = result.Message, Data = result.Data });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IServiceResult>> UpdateVehicleAsync(Guid id, [FromBody] UpdateVehicleRequestDTO dto)
+        {
+            var result = await _vehicleService.UpdateVehicleAsync(id, dto);
             return StatusCode((int)result.StatusCode, new { Message = result.Message, Data = result.Data });
         }
     }

@@ -55,5 +55,12 @@ namespace EVStationRental.APIServices.Controllers
             var result = await _stationService.AddVehiclesToStationAsync(dto);
             return StatusCode(result.StatusCode, new { Message = result.Message });
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<IServiceResult>> UpdateStationAsync(Guid id, [FromBody] UpdateStationRequestDTO dto)
+        {
+            var result = await _stationService.UpdateStationAsync(id, dto);
+            return StatusCode((int)result.StatusCode, new { Message = result.Message, Data = result.Data });
+        }
     }
 }

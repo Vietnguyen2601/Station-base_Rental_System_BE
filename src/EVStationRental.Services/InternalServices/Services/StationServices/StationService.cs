@@ -117,5 +117,23 @@ namespace EVStationRental.Services.InternalServices.Services.StationServices
                 Message = "Thêm xe vào station thành công"
             };
         }
+
+        public async Task<IServiceResult> UpdateStationAsync(Guid stationId, UpdateStationRequestDTO dto)
+        {
+            var station = await unitOfWork.StationRepository.GetStationByIdAsync(stationId);
+            if (station == null)
+                return new ServiceResult { StatusCode = Const.WARNING_NO_DATA_CODE, Message = "Không tìm th?y tr?m" };
+
+            // Không cho ch?nh s?a StationId
+            dto.MapToStation(station);
+
+            var updated = await unitOfWork.StationRepository.UpdateStationAsync(station);
+            return new ServiceResult
+            {
+                StatusCode = Const.SUCCESS_UPDATE_CODE,
+                Message = Const.SUCCESS_UPDATE_MSG,
+                Data = updated
+            };
+        }
     }
 }
