@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using EVStationRental.Common.DTOs.Authentication;
@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using EVStationRental.Repositories.UnitOfWork;
 using EVStationRental.Common.Helpers;
+using EVStationRental.Services.Base;
+using EVStationRental.Common.Enums.ServiceResultEnum;
 
 namespace EVStationRental.Services.InternalServices.Services.AuthServices;
 
@@ -26,74 +28,195 @@ public class AuthService : IAuthService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<TokenResponseDTO> LoginAsync(LoginRequestDTO request)
+    public async Task<IServiceResult> LoginAsync(LoginRequestDTO request)
     {
-        var account = await _authRepository.GetAccountByUsernameAsync(request.Username);
-        if (account == null)
+        try
         {
-            throw new UnauthorizedAccessException("Invalid credentials");
-        }
+            var account = await _authRepository.GetAccountByUsernameAsync(request.Username);
+            if (account == null)
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.UNAUTHORIZED_ACCESS_CODE,
+                    Message = "Tên đăng nhập không tồn tại"
+                };
+            }
 
-        if (!PasswordHasher.Verify(request.Password, account.Password))
+            if (!account.IsActive)
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.FORBIDDEN_ACCESS_CODE,
+                    Message = "Tài khoản đã bị vô hiệu hóa"
+                };
+            }
+
+            if (!PasswordHasher.Verify(request.Password, account.Password))
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.UNAUTHORIZED_ACCESS_CODE,
+                    Message = "Mật khẩu không chính xác"
+                };
+            }
+
+            var tokens = await GenerateTokensAsync(account);
+            return new ServiceResult
+            {
+                StatusCode = Const.SUCCESS_LOGIN_CODE,
+                Message = Const.SUCCESS_LOGIN_MSG,
+                Data = tokens
+            };
+        }
+        catch (Exception ex)
         {
-            throw new UnauthorizedAccessException("Invalid credentials");
+            return new ServiceResult
+            {
+                StatusCode = Const.ERROR_EXCEPTION,
+                Message = $"Lỗi khi đăng nhập: {ex.Message}"
+            };
         }
-
-        return await GenerateTokensAsync(account);
     }
 
-    public async Task<TokenResponseDTO> RefreshAsync(RefreshTokenRequestDTO request)
+    public async Task<IServiceResult> RefreshAsync(RefreshTokenRequestDTO request)
     {
-        if (!_refreshStore.TryGetValue(request.RefreshToken, out var tuple))
+        try
         {
-            throw new UnauthorizedAccessException("Invalid refresh token");
-        }
-        if (tuple.expiresAt <= DateTime.UtcNow)
-        {
+            if (!_refreshStore.TryGetValue(request.RefreshToken, out var tuple))
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.UNAUTHORIZED_ACCESS_CODE,
+                    Message = "Refresh token không hợp lệ"
+                };
+            }
+
+            if (tuple.expiresAt <= DateTime.UtcNow)
+            {
+                _refreshStore.Remove(request.RefreshToken);
+                return new ServiceResult
+                {
+                    StatusCode = Const.UNAUTHORIZED_ACCESS_CODE,
+                    Message = "Refresh token đã hết hạn"
+                };
+            }
+
+            var account = await _authRepository.GetAccountByIdAsync(tuple.accountId);
+            if (account == null)
+            {
+                _refreshStore.Remove(request.RefreshToken);
+                return new ServiceResult
+                {
+                    StatusCode = Const.WARNING_NO_DATA_CODE,
+                    Message = "Tài khoản không tồn tại"
+                };
+            }
+
+            if (!account.IsActive)
+            {
+                _refreshStore.Remove(request.RefreshToken);
+                return new ServiceResult
+                {
+                    StatusCode = Const.FORBIDDEN_ACCESS_CODE,
+                    Message = "Tài khoản đã bị vô hiệu hóa"
+                };
+            }
+
             _refreshStore.Remove(request.RefreshToken);
-            throw new UnauthorizedAccessException("Expired refresh token");
+            var tokens = await GenerateTokensAsync(account);
+            return new ServiceResult
+            {
+                StatusCode = Const.SUCCESS_GENERATE_TOKEN_CODE,
+                Message = "Làm mới token thành công",
+                Data = tokens
+            };
         }
-
-        var account = await _authRepository.GetAccountByIdAsync(tuple.accountId)
-                      ?? throw new UnauthorizedAccessException("Account not found");
-
-        _refreshStore.Remove(request.RefreshToken);
-        return await GenerateTokensAsync(account);
+        catch (Exception ex)
+        {
+            return new ServiceResult
+            {
+                StatusCode = Const.ERROR_EXCEPTION,
+                Message = $"Lỗi khi làm mới token: {ex.Message}"
+            };
+        }
     }
 
-    public async Task<TokenResponseDTO> RegisterAsync(RegisterRequestDTO request)
+    public async Task<IServiceResult> RegisterAsync(RegisterRequestDTO request)
     {
-        // Basic uniqueness checks
-        var existingByUsername = await _unitOfWork.AccountRepository.GetByUsernameAsync(request.Username);
-        if (existingByUsername != null)
+        try
         {
-            throw new InvalidOperationException("Username already exists");
+            // Basic uniqueness checks
+            var existingByUsername = await _unitOfWork.AccountRepository.GetByUsernameAsync(request.Username);
+            if (existingByUsername != null)
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.WARNING_DATA_EXISTED_CODE,
+                    Message = Const.ERROR_USERNAME_EXISTS_MSG
+                };
+            }
+
+            var existingByEmail = await _unitOfWork.AccountRepository.GetByEmailAsync(request.Email);
+            if (existingByEmail != null)
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.WARNING_DATA_EXISTED_CODE,
+                    Message = Const.ERROR_EMAIL_EXISTS_MSG
+                };
+            }
+
+            if (!string.IsNullOrEmpty(request.ContactNumber))
+            {
+                var existingByPhone = await _unitOfWork.AccountRepository.GetByContactNumberAsync(request.ContactNumber);
+                if (existingByPhone != null)
+                {
+                    return new ServiceResult
+                    {
+                        StatusCode = Const.WARNING_DATA_EXISTED_CODE,
+                        Message = Const.ERROR_PHONE_EXISTS_MSG
+                    };
+                }
+            }
+
+            if (!string.Equals(request.Password, request.ConfirmPassword))
+            {
+                return new ServiceResult
+                {
+                    StatusCode = Const.ERROR_VALIDATION_CODE,
+                    Message = "Mật khẩu và xác nhận mật khẩu không khớp"
+                };
+            }
+
+            var account = new Account
+            {
+                AccountId = Guid.NewGuid(),
+                Username = request.Username,
+                Password = PasswordHasher.Hash(request.Password),
+                Email = request.Email,
+                ContactNumber = request.ContactNumber,
+                IsActive = true
+            };
+
+            // Use GenericRepository create
+            _unitOfWork.AccountRepository.Create(account);
+
+            var tokens = await GenerateTokensAsync(account);
+            return new ServiceResult
+            {
+                StatusCode = Const.SUCCESS_REGISTER_CODE,
+                Message = Const.SUCCESS_REGISTER_MSG,
+                Data = tokens
+            };
         }
-        var existingByEmail = await _unitOfWork.AccountRepository.GetByEmailAsync(request.Email);
-        if (existingByEmail != null)
+        catch (Exception ex)
         {
-            throw new InvalidOperationException("Email already exists");
+            return new ServiceResult
+            {
+                StatusCode = Const.ERROR_EXCEPTION,
+                Message = $"Lỗi khi đăng ký: {ex.Message}"
+            };
         }
-
-        if (!string.Equals(request.Password, request.ConfirmPassword))
-        {
-            throw new InvalidOperationException("Password and ConfirmPassword do not match");
-        }
-
-        var account = new Account
-        {
-            AccountId = Guid.NewGuid(),
-            Username = request.Username,
-            Password = PasswordHasher.Hash(request.Password),
-            Email = request.Email,
-            ContactNumber = request.ContactNumber,
-            IsActive = true
-        };
-
-        // Use GenericRepository create
-        _unitOfWork.AccountRepository.Create(account);
-
-        return await GenerateTokensAsync(account);
     }
 
     private async Task<TokenResponseDTO> GenerateTokensAsync(Account account)
@@ -146,5 +269,3 @@ public class AuthService : IAuthService
         };
     }
 }
-
-

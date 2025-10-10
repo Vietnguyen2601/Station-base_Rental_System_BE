@@ -1,7 +1,8 @@
-using EVStationRental.Common.DTOs.Authentication;
+﻿using EVStationRental.Common.DTOs.Authentication;
 using EVStationRental.Services.InternalServices.IServices.IAuthServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using EVStationRental.Services.Base;
 
 namespace EVStationRental.APIServices.Controllers;
 
@@ -18,27 +19,48 @@ public class AuthController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<ActionResult<TokenResponseDTO>> Login([FromBody] LoginRequestDTO request)
+    public async Task<ActionResult<IServiceResult>> Login([FromBody] LoginRequestDTO request)
     {
-        var tokens = await _authService.LoginAsync(request);
-        return Ok(tokens);
+        var result = await _authService.LoginAsync(request);
+        
+        return result.StatusCode switch
+        {
+            200 => Ok(result),
+            401 => Unauthorized(result),
+            403 => StatusCode(403, result),
+            _ => StatusCode(result.StatusCode, result)
+        };
     }
 
     [AllowAnonymous]
     [HttpPost("refresh")]
-    public async Task<ActionResult<TokenResponseDTO>> Refresh([FromBody] RefreshTokenRequestDTO request)
+    public async Task<ActionResult<IServiceResult>> Refresh([FromBody] RefreshTokenRequestDTO request)
     {
-        var tokens = await _authService.RefreshAsync(request);
-        return Ok(tokens);
+        var result = await _authService.RefreshAsync(request);
+        
+        return result.StatusCode switch
+        {
+            200 => Ok(result),
+            401 => Unauthorized(result),
+            403 => StatusCode(403, result),
+            404 => NotFound(result),
+            _ => StatusCode(result.StatusCode, result)
+        };
     }
 
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<ActionResult<TokenResponseDTO>> Register([FromBody] RegisterRequestDTO request)
+    public async Task<ActionResult<IServiceResult>> Register([FromBody] RegisterRequestDTO request)
     {
-        var tokens = await _authService.RegisterAsync(request);
-        return Ok(tokens);
+        var result = await _authService.RegisterAsync(request);
+        
+        return result.StatusCode switch
+        {
+            201 => StatusCode(201, result),
+            200 => Ok(result),
+            400 => BadRequest(result),
+            409 => Conflict(result),
+            _ => StatusCode(result.StatusCode, result)
+        };
     }
 }
-
-
