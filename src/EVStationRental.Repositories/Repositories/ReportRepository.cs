@@ -28,5 +28,15 @@ namespace EVStationRental.Repositories.Repositories
                 .Include(r => r.Vehicle)
                 .FirstOrDefaultAsync(r => r.ReportId == id && r.Isactive);
         }
+
+        public async Task<List<Report>> GetByAccountIdAsync(Guid accountId)
+        {
+            return await _context.Reports
+                .Include(r => r.Account)
+                .Include(r => r.Vehicle)
+                .Where(r => r.AccountId == accountId && r.Isactive)
+                .OrderByDescending(r => r.GeneratedDate)
+                .ToListAsync();
+        }
     }
 }

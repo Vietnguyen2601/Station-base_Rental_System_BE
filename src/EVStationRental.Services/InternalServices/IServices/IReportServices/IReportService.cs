@@ -7,5 +7,6 @@ namespace EVStationRental.Services.InternalServices.IServices.IReportServices
     {
         Task<IServiceResult> GetAllReportsAsync();
         Task<IServiceResult> GetReportByIdAsync(Guid reportId);
+        Task<IServiceResult> GetReportsByAccountIdAsync(Guid accountId);
     }
 }

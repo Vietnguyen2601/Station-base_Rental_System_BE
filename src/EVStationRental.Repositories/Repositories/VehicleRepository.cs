@@ -23,7 +23,7 @@ namespace EVStationRental.Repositories.Repositories
         {
             return await _context.Set<Vehicle>()
                 .Include(v => v.Model)
-                    .ThenInclude(m => m.Type)
+                .ThenInclude(m => m.Type)
                 .Include(v => v.Station)
                 .Include(v => v.Orders)
                 .ToListAsync();

@@ -37,5 +37,17 @@ namespace EVStationRental.APIServices.Controllers
             var result = await _reportService.GetReportByIdAsync(id);
             return StatusCode(result.StatusCode, result);
         }
+
+        /// <summary>
+        /// L?y t?t c? báo cáo c?a m?t tài kho?n
+        /// </summary>
+        /// <param name="accountId">ID c?a tài kho?n</param>
+        /// <returns>Danh sách báo cáo c?a tài kho?n</returns>
+        [HttpGet("account/{accountId}")]
+        public async Task<IActionResult> GetReportsByAccountId(Guid accountId)
+        {
+            var result = await _reportService.GetReportsByAccountIdAsync(accountId);
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
