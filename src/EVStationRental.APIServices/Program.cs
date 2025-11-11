@@ -50,6 +50,8 @@ try
     // Map enums with proper names
     Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.OrderStatus>("order_status", 
         nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
+    Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.DamageLevelEnum>("damage_level_enum",
+        nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
     Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.VehicleStatus>("vehicle_status",
         nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
     Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.PaymentType>("payment_type_enum",
@@ -83,6 +85,7 @@ builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 //report
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+//damage report
 //damgeReport
 builder.Services.AddScoped<IDamageReportRepository, DamageReportRepository>();
 builder.Services.AddScoped<IDamageReportService, DamageReportService>();

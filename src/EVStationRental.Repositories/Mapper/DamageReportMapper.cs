@@ -21,6 +21,7 @@ namespace EVStationRental.Repositories.Mapper
                 VehicleId = damageReport.VehicleId,
                 Description = damageReport.Description,
                 EstimatedCost = damageReport.EstimatedCost,
+                DamageLevel = damageReport.DamageLevel,
                 Img = damageReport.Img,
                 CreatedAt = damageReport.CreatedAt,
                 UpdatedAt = damageReport.UpdatedAt,
@@ -36,6 +37,7 @@ namespace EVStationRental.Repositories.Mapper
                 VehicleId = dto.VehicleId,
                 Description = dto.Description,
                 EstimatedCost = dto.EstimatedCost,
+                DamageLevel = dto.DamageLevel,
                 Img = dto.Img,
                 CreatedAt = DateTime.Now
             };
@@ -44,6 +46,7 @@ namespace EVStationRental.Repositories.Mapper
         {
             if (dto.Description != null) damageReport.Description = dto.Description;
             if (dto.EstimatedCost != null) damageReport.EstimatedCost = dto.EstimatedCost;
+            if (dto.DamageLevel != null) damageReport.DamageLevel = dto.DamageLevel;
             if (dto.Img != null) damageReport.Img = dto.Img;
             damageReport.UpdatedAt = DateTime.Now;
         }

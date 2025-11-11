@@ -25,7 +25,7 @@ namespace EVStationRental.Services.InternalServices.Services.FeedbackServices
             var hasCompleatedOrder = await _unitOfWork.OrderRepository
                 .GetOrderByIdAsync(dto.OrderId);
 
-            if (hasCompleatedOrder == null || !hasCompleatedOrder.Status.Equals("COMPLETED"))
+            if (hasCompleatedOrder == null )
             {
                 return new ServiceResult
                 {
