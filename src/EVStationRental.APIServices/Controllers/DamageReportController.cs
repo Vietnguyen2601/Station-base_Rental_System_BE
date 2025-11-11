@@ -27,15 +27,15 @@ namespace EVStationRental.APIServices.Controllers
             return StatusCode(result.StatusCode, result);
         }
         [HttpGet("{damageReportId}")]
-        public async Task<IActionResult> GetDamageReportById(Guid DamageReportId)
+        public async Task<IActionResult> GetDamageReportById(Guid damageReportId)
         {
-            var result = await _damageReportService.GetDamageReportByIdAsync(DamageReportId);
+            var result = await _damageReportService.GetDamageReportByIdAsync(damageReportId);
             return StatusCode(result.StatusCode, result);
         }
         [HttpGet("vehicle/{vehicleId}")]
-        public async Task<IActionResult> GetDamageReportsByVehicleId(Guid Vehicleid)
+        public async Task<IActionResult> GetDamageReportsByVehicleId(Guid vehicleId)
         {
-            var result = await _damageReportService.GetDamageReportsByVehicleIdAsync(Vehicleid);
+            var result = await _damageReportService.GetDamageReportsByVehicleIdAsync(vehicleId);
             return StatusCode(result.StatusCode, result);
         }
 

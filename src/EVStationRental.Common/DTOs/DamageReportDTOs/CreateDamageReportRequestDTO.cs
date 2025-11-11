@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVStationRental.Common.Enums.EnumModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace EVStationRental.Common.DTOs.DamageReportDTOs
         public Guid VehicleId { get; set; }
 
         public string Description { get; set; } = null!;
+
+        public DamageLevelEnum DamageLevel { get; set; }
 
         public decimal EstimatedCost { get; set; }
 
