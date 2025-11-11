@@ -20,6 +20,7 @@ using EVStationRental.Services.InternalServices.Services.VehicleServices;
 using EVStationRental.Services.InternalServices.Services.StationServices;
 using EVStationRental.Services.InternalServices.Services.PromotionServices;
 using EVStationRental.Services.InternalServices.Services.ReportServices;
+using EVStationRental.Services.InternalServices.Services.DamageReportServices;
 using EVStationRental.Services.InternalServices.Services.OrderServices;
 using EVStationRental.Services.InternalServices.Services.PaymentServices;
 using EVStationRental.Services.InternalServices.Services.PaymentServices;
@@ -85,6 +86,7 @@ builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 //damage report
+//damgeReport
 builder.Services.AddScoped<IDamageReportRepository, DamageReportRepository>();
 builder.Services.AddScoped<IDamageReportService, DamageReportService>();
 //order
