@@ -55,11 +55,15 @@ namespace EVStationRental.Services.InternalServices.Services.StationServices
                     Message = Const.WARNING_NO_DATA_MSG
                 };
             }
+            
+            // Map to DTO to prevent circular reference
+            var stationDTOs = stations.Select(s => s.ToViewStationDTO()).ToList();
+            
             return new ServiceResult
             {
                 StatusCode = Const.SUCCESS_READ_CODE,
                 Message = Const.SUCCESS_READ_MSG,
-                Data = stations
+                Data = stationDTOs
             };
         }
 
@@ -147,22 +151,30 @@ namespace EVStationRental.Services.InternalServices.Services.StationServices
         public async Task<IServiceResult> GetActiveStationsAsync()
         {
             var stations = await unitOfWork.StationRepository.GetActiveStationsAsync();
+            
+            // Map to DTO to prevent circular reference
+            var stationDTOs = stations.Select(s => s.ToViewStationDTO()).ToList();
+            
             return new ServiceResult
             {
                 StatusCode = Const.SUCCESS_READ_CODE,
                 Message = Const.SUCCESS_READ_MSG,
-                Data = stations
+                Data = stationDTOs
             };
         }
 
         public async Task<IServiceResult> GetInactiveStationsAsync()
         {
             var stations = await unitOfWork.StationRepository.GetInactiveStationsAsync();
+            
+            // Map to DTO to prevent circular reference
+            var stationDTOs = stations.Select(s => s.ToViewStationDTO()).ToList();
+            
             return new ServiceResult
             {
                 StatusCode = Const.SUCCESS_READ_CODE,
                 Message = Const.SUCCESS_READ_MSG,
-                Data = stations
+                Data = stationDTOs
             };
         }
 
