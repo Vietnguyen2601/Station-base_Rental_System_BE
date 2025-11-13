@@ -85,6 +85,7 @@ builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 //report
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+//damageReport
 //damage report
 //damgeReport
 builder.Services.AddScoped<IDamageReportRepository, DamageReportRepository>();
