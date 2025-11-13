@@ -13,16 +13,19 @@ using EVStationRental.Services.InternalServices.IServices.IReportServices;
 using EVStationRental.Services.InternalServices.IServices.IOrderServices;
 using EVStationRental.Services.InternalServices.IServices.IPaymentServices;
 using EVStationRental.Services.InternalServices.IServices.IWalletServices;
+using EVStationRental.Services.InternalServices.IServices.IDashboardServices;
 using EVStationRental.Services.InternalServices.Services.AccountServices;
 using EVStationRental.Services.InternalServices.Services.AuthServices;
 using EVStationRental.Services.InternalServices.Services.VehicleServices;
 using EVStationRental.Services.InternalServices.Services.StationServices;
 using EVStationRental.Services.InternalServices.Services.PromotionServices;
 using EVStationRental.Services.InternalServices.Services.ReportServices;
+using EVStationRental.Services.InternalServices.Services.DamageReportServices;
 using EVStationRental.Services.InternalServices.Services.OrderServices;
 using EVStationRental.Services.InternalServices.Services.PaymentServices;
 using EVStationRental.Services.InternalServices.Services.PaymentServices;
 using EVStationRental.Services.InternalServices.Services.WalletServices;
+using EVStationRental.Services.InternalServices.Services.DashboardServices;
 using EVStationRental.Services.ExternalService.IServices;
 using EVStationRental.Services.ExternalService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -46,6 +49,8 @@ try
     
     // Map enums with proper names
     Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.OrderStatus>("order_status", 
+        nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
+    Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.DamageLevelEnum>("damage_level_enum",
         nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
     Npgsql.NpgsqlConnection.GlobalTypeMapper.MapEnum<EVStationRental.Common.Enums.EnumModel.VehicleStatus>("vehicle_status",
         nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
@@ -81,6 +86,8 @@ builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 //damageReport
+//damage report
+//damgeReport
 builder.Services.AddScoped<IDamageReportRepository, DamageReportRepository>();
 builder.Services.AddScoped<IDamageReportService, DamageReportService>();
 //order
@@ -97,6 +104,8 @@ builder.Services.AddScoped<DatabasePaymentService>(); // Add database payment se
 //wallet
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IWalletService, WalletService>();
+//dashboard
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // Đăng ký UnitOfWork và các Repository liên quan
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

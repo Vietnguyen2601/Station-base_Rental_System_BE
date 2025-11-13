@@ -30,7 +30,10 @@ namespace EVStationRental.Repositories.Repositories
 
         public async Task<List<VehicleModel>> GetAllVehicleModelsAsync()
         {
-            return await _context.Set<VehicleModel>().ToListAsync();
+            return await _context.VehicleModels
+                .Include(vm => vm.Type)
+                .Where(vm => vm.Isactive)
+                .ToListAsync();
         }
 
         public async Task<VehicleModel?> GetVehicleModelByIdAsync(Guid id)

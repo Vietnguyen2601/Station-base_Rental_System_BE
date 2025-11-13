@@ -28,17 +28,17 @@ namespace EVStationRental.Repositories.Repositories
 
         public async Task<List<DamageReport>> GetAllDamageReportsAsync()
         {
-            return await _context.Set<DamageReport>().Where(vt => vt.Isactive).ToListAsync();
+            return await _context.Set<DamageReport>().ToListAsync();
         }
 
         public async Task<DamageReport?> GetDamageReportByDamageIdAsync(Guid damageId)
         {
-            return await _context.Set<DamageReport>().FindAsync(damageId);
+            return await _context.Set<DamageReport>().FirstOrDefaultAsync(v => v.DamageId == damageId);
         }
 
         public async Task<DamageReport?> GetDamageReportByOrderIdAsync(Guid orderId)
         {
-            return await _context.Set<DamageReport>().FindAsync(orderId);
+            return await _context.Set<DamageReport>().FirstOrDefaultAsync(v => v.OrderId == orderId);
         }
 
         public async Task<List<DamageReport>> GetDamageReportsByVehicleIdAsync(Guid vehicleId)

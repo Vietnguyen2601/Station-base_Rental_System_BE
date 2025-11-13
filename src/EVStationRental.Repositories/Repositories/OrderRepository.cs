@@ -123,7 +123,15 @@ namespace EVStationRental.Repositories.Repositories
 
         public async Task<List<Order>> GetAllOrdersAsync()
         {
-            return await _context.Set<Order>().ToListAsync();
+            return await _context.Orders
+                .Include(o => o.Vehicle)
+                    .ThenInclude(v => v.Station)
+                .Include(o => o.Vehicle)
+                    .ThenInclude(v => v.Model)
+                .Include(o => o.Customer)
+                .Include(o => o.Promotion)
+                .Where(o => o.Isactive)
+                .ToListAsync();
         }
 
         /// <summary>

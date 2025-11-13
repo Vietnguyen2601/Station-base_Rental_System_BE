@@ -387,7 +387,9 @@ namespace EVStationRental.Services.InternalServices.Services.WalletServices
                 }
 
                 // Parse transaction ID from vnp_TxnRef
-                if (!Guid.TryParse(callback.vnp_TxnRef, out var transactionId))
+                // Format is: {transactionId}_{timestamp}
+                var txnRefParts = callback.vnp_TxnRef?.Split('_');
+                if (txnRefParts == null || txnRefParts.Length == 0 || !Guid.TryParse(txnRefParts[0], out var transactionId))
                 {
                     return new ServiceResult
                     {

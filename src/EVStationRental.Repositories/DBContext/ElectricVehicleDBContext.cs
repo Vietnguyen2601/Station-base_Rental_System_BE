@@ -182,6 +182,8 @@ public partial class ElectricVehicleDBContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.EstimatedCost).HasColumnName("estimated_cost");
+            entity.Property(e => e.DamageLevel)
+                .HasColumnName("damage_level");
             entity.Property(e => e.Img)
                 .HasColumnType("character varying")
                 .HasColumnName("img");

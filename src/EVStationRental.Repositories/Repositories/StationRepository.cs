@@ -32,7 +32,10 @@ namespace EVStationRental.Repositories.Repositories
 
         public async Task<List<Station>> GetAllStationsAsync()
         {
-            return await _context.Set<Station>().ToListAsync();
+            return await _context.Stations
+                .Include(s => s.Vehicles)
+                .Where(s => s.Isactive)
+                .ToListAsync();
         }
 
         public async Task<List<Vehicle>> GetVehiclesByStationIdAsync(Guid stationId)

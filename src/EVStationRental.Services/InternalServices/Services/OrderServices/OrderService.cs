@@ -229,10 +229,11 @@ namespace EVStationRental.Services.InternalServices.Services.OrderServices
         /// Calculate price with tiered discount: 5% off for every 12 hours
         /// Formula: Each 12-hour block gets additional 5% discount
         /// Example: 
-        /// - 0-12h: 100% price
-        /// - 12-24h: 95% price
-        /// - 24-36h: 90% price
-        /// - etc.
+        /// - 0-12h: 100% price (no discount)
+        /// - 12-24h: 95% price (5% discount)
+        /// - 24-36h: 90% price (10% discount)
+        /// - 36-48h: 85% price (15% discount - maximum)
+        /// - 48h+: 85% price (capped at 15% discount)
         /// </summary>
         private decimal CalculateTieredPrice(decimal totalHours, decimal pricePerHour)
         {
@@ -251,8 +252,8 @@ namespace EVStationRental.Services.InternalServices.Services.OrderServices
                 // Calculate discount for this tier (5% per tier level)
                 decimal discountMultiplier = 1 - (tierLevel * 0.05m);
                 
-                // Minimum discount multiplier is 0.5 (50% off max)
-                discountMultiplier = Math.Max(discountMultiplier, 0.5m);
+                // Minimum discount multiplier is 0.85 (15% off max)
+                discountMultiplier = Math.Max(discountMultiplier, 0.85m);
                 
                 // Add price for this tier
                 totalPrice += hoursInTier * pricePerHour * discountMultiplier;
